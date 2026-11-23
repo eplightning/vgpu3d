@@ -313,6 +313,8 @@ HRESULT
 vgpuFinishBlts(PTRITON12_DEVICE dev, struct vgpu_blt_frame *frames)
 {
    for (struct vgpu_blt_frame *f = frames; f; f = f->next) {
+      /* A command-list replay can refresh the readback while the kernel still
+       * needs the pixels published for the original present. */
       if (f->published)
          continue;
       BYTE *mapped = NULL;
